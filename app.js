@@ -6,7 +6,10 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 // const hpp = require('hpp');
 
-const app = express()
+const AppError = require('./utils/AppError');
+const skillRouter = require('./routes/skillRoutes');
+
+const app = express();
 
 //==== Middlewares
 app.use(helmet());  // Set security HTTP headers
@@ -25,4 +28,15 @@ app.use('/api', limiter); // apply this limiter middleware only on our api
 app.use(mongoSanitize()); // Data Sanitization against NoSQL Query Injection
 app.use(xss()); // Data Sanitization against XSS
 
-module.exports = app;
+app.use('/api/v1/skills', skillRouter);
+
+app.all('*', (req, res, next) => {
+  /*
+   * If an argument is passed in next(),
+   * Express will assume that there was an error
+   * and will skip all the middlewares in the middleware stack
+   * and send the error to the error handling middleware */
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+module.exports = app; 
