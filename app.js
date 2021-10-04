@@ -12,7 +12,7 @@ const skillRouter = require('./routes/skillRoutes');
 const app = express();
 
 //==== Middlewares
-app.use(helmet());  // Set security HTTP headers
+app.use(helmet()); // Set security HTTP headers
 
 // We want to call this middleware only on development environment
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev')); // generate response logs
@@ -39,4 +39,4 @@ app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-module.exports = app; 
+module.exports = app;
