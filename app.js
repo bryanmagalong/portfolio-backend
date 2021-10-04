@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 
 const AppError = require('./utils/AppError');
 const skillRouter = require('./routes/skillRoutes');
+const projectRouter = require('./routes/projectRoutes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(mongoSanitize()); // Data Sanitization against NoSQL Query Injection
 app.use(xss()); // Data Sanitization against XSS
 
 app.use('/api/v1/skills', skillRouter);
+app.use('/api/v1/projects', projectRouter);
 
 app.all('*', (req, res, next) => {
   /*
